@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import { Text,  StyleSheet } from 'react-native'
+import { Text,  StyleSheet  } from 'react-native'
 import { Button, Card, CardSection, Input, Spinner } from './common'
 import { Context } from '../context/AuthContext'
 

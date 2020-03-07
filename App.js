@@ -1,11 +1,12 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
-import { Header } from './src/components/common'
+import { Header, Button, Spinner } from './src/components/common'
 import LoginForm from './src/components/LoginForm'
 import firebase from 'firebase'
 import { Provider as AuthProvider } from './src/context/AuthContext'
-
 const App = () => {
+
+  const [loggedIn, setLoggedIn] = useState(null)
 
    useEffect(() => {
       if (!firebase.apps.length) {
@@ -20,13 +21,39 @@ const App = () => {
           measurementId: "G-MMQY4CBTXH"
         });
       }
-    }, [])
+
+      firebase.auth().onAuthStateChanged((user) => {
+        user ? setLoggedIn(true) : setLoggedIn(false)
+      })
+      console.log(loggedIn)
+    }, [loggedIn])
     
+    const renderContent = () => {
+      console.log("Render content")
+      switch (loggedIn){
+        case true: 
+          return (
+            <Button 
+              onPress={() => firebase.auth().signOut()}> 
+              Logout
+            </Button>
+          )
+        case false:
+          return (
+            <LoginForm />
+          )
+        
+        default: 
+          return <Spinner size="large"/>
+
+      }
+    }
+
     return (
       <AuthProvider>
         <View>
           <Header headerText="Authentication" />
-          <LoginForm />
+          {renderContent()}
         </View>
       </AuthProvider>
     )
