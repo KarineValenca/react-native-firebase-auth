@@ -25,7 +25,6 @@ const App = () => {
       firebase.auth().onAuthStateChanged((user) => {
         user ? setLoggedIn(true) : setLoggedIn(false)
       })
-      console.log(loggedIn)
     }, [loggedIn])
     
     const renderContent = () => {
@@ -33,10 +32,12 @@ const App = () => {
       switch (loggedIn){
         case true: 
           return (
-            <Button 
-              onPress={() => firebase.auth().signOut()}> 
-              Logout
-            </Button>
+            <View style={{ height: 50 }}>
+              <Button 
+                onPress={() => firebase.auth().signOut()}> 
+                Logout
+              </Button>
+            </View>
           )
         case false:
           return (
@@ -44,14 +45,18 @@ const App = () => {
           )
         
         default: 
-          return <Spinner size="large"/>
+          return (
+            <View style={{ height: 50 }}>
+              <Spinner size="large"/>
+            </View>
+          )
 
       }
     }
 
     return (
       <AuthProvider>
-        <View>
+        <View style={{ flex: 1 }}>
           <Header headerText="Authentication" />
           {renderContent()}
         </View>
