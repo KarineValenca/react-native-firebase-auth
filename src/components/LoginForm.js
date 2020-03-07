@@ -7,7 +7,6 @@ const LoginForm = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const { state, signin } = useContext(Context)
-    console.log(state) 
 
     return (
         <Card>
@@ -46,7 +45,8 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: 'red',
         marginLeft: 15,
-        marginTop: 15
+        marginTop: 15,
+        alignSelf: "center"
     },
 })
 

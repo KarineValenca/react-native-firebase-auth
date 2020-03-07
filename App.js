@@ -6,6 +6,7 @@ import firebase from 'firebase'
 import { Provider as AuthProvider } from './src/context/AuthContext'
 
 const App = () => {
+
    useEffect(() => {
       if (!firebase.apps.length) {
         firebase.initializeApp({
@@ -20,6 +21,7 @@ const App = () => {
         });
       }
     }, [])
+    
     return (
       <AuthProvider>
         <View>
