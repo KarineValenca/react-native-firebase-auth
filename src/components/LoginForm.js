@@ -1,12 +1,24 @@
 import React, {useState, useContext} from 'react'
 import { Text,  StyleSheet } from 'react-native'
-import { Button, Card, CardSection, Input } from './common'
+import { Button, Card, CardSection, Input, Spinner } from './common'
 import { Context } from '../context/AuthContext'
 
 const LoginForm = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const { state, signin } = useContext(Context)
+
+    const renderButton = () => {
+        if (state.isLoading) {
+            return <Spinner size="small" />
+        }
+
+        return (
+            <Button onPress={() => signin(email, password)}>
+                Log In
+            </Button>
+        )
+    }
 
     return (
         <Card>
@@ -32,9 +44,7 @@ const LoginForm = () => {
            { state.errorMessage ? <Text style={styles.errorMessage}>{state.errorMessage}</Text> : null }
 
             <CardSection>
-                <Button onPress={() => signin(email, password)}>
-                    Log In
-                </Button>
+                {renderButton()}
             </CardSection>
         </Card>
     )

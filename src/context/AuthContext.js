@@ -4,20 +4,30 @@ import createDataContext from './createDataContext'
 const authReducer = (state, action ) => {
     switch(action.type) {
         case 'signin':
-            return { errorMessage: '' }
+            return { errorMessage: '', isLoading: true }
         case 'add_error':
-            return { ...state, errorMessage: action.payload}
+            return { ...state, errorMessage: action.payload, isLoading: false}
+        case 'clear_loading':
+            return { ...state, isLoading: false}
     }
 }
 
 //TODO: improve this method to use a signup method
-const signin = (dispatch) => async (email, password) => {
+const signin = (dispatch) => (email, password) => {
     try{
-        await firebase.auth().signInWithEmailAndPassword(email, password)
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(() => {
+                console.log("login completed, clear loading please")
+                dispatch({ type: 'clear_loading' })
+            })
             .catch(() => {
                 firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    console.log("signup completed, clear loading please")
+                    dispatch({ type: 'clear_loading' })
+                })
                 .catch(() => {
-                    dispatch({ type: 'add_error', payload: "Authentication error" })
+                    dispatch({ type: 'add_error', payload: "Authentication failed" })
                 })
             })
         dispatch({ type: 'signin'})
@@ -30,5 +40,5 @@ const signin = (dispatch) => async (email, password) => {
 export const {Provider, Context } = createDataContext(
     authReducer,
     { signin },
-    { token: null, errorMessage: '' } 
+    { isLoading: false, errorMessage: '' } 
 )
